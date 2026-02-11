@@ -58,6 +58,24 @@ export async function addDocument(
   }
 }
 
+export function listAllDocuments() {
+  return memoryStore.map((d) => ({
+    documentId: d.documentId,
+    content: d.content.slice(0, 200),
+    metadata: d.metadata,
+  }));
+}
+
+export function getDocumentById(documentId: string) {
+  const doc = memoryStore.find((d) => d.documentId === documentId);
+  if (!doc) return null;
+  return {
+    documentId: doc.documentId,
+    content: doc.content,
+    metadata: doc.metadata,
+  };
+}
+
 export async function retrieveWithPermify(
   query: string,
   userId: string,

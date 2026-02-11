@@ -33,15 +33,6 @@ export class PermifyClient {
     const url = `${this.base}/tenants/${this.tenantId}/permissions/check`;
 
     try {
-      console.log('Sending request to Permify', {
-        url,
-        entityType,
-        entityId,
-        permission,
-        subjectType,
-        subjectId,
-        relation,
-      });
       const resp = await axios.post(
         url,
         {
@@ -64,16 +55,116 @@ export class PermifyClient {
         { headers: { 'Content-Type': 'application/json' } }
       );
 
-      const can = resp.data?.can;
-      return (
-        can === 'CHECK_RESULT_ALLOWED' ||
-        can === 'allowed' ||
-        can === 'ALLOW'
-      );
+      return resp.data?.can === 'CHECK_RESULT_ALLOWED';
     } catch (err) {
-      const e: any = err as any;
+      const e = err as any;
       console.error(
         'Permify check error',
+        e?.response?.data ?? e?.message ?? e
+      );
+      return false;
+    }
+  }
+
+  async lookupEntity({
+    entityType,
+    permission,
+    subjectType,
+    subjectId,
+  }: {
+    entityType: string;
+    permission: string;
+    subjectType: string;
+    subjectId: string;
+  }): Promise<string[]> {
+    const url = `${this.base}/tenants/${this.tenantId}/permissions/lookup-entity`;
+    try {
+      const resp = await axios.post(
+        url,
+        {
+          metadata: { snap_token: '', schema_version: '', depth: 20 },
+          entity_type: entityType,
+          permission,
+          subject: { type: subjectType, id: subjectId, relation: '' },
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      return resp.data?.entity_ids ?? [];
+    } catch (err) {
+      const e = err as any;
+      console.error(
+        'Permify lookupEntity error',
+        e?.response?.data ?? e?.message ?? e
+      );
+      return [];
+    }
+  }
+
+  async lookupSubject({
+    entityType,
+    entityId,
+    permission,
+    subjectType,
+  }: {
+    entityType: string;
+    entityId: string;
+    permission: string;
+    subjectType: string;
+  }): Promise<string[]> {
+    const url = `${this.base}/tenants/${this.tenantId}/permissions/lookup-subject`;
+    try {
+      const resp = await axios.post(
+        url,
+        {
+          metadata: { snap_token: '', schema_version: '', depth: 20 },
+          entity: { type: entityType, id: entityId },
+          permission,
+          subject_reference: { type: subjectType, relation: '' },
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      return resp.data?.subject_ids ?? [];
+    } catch (err) {
+      const e = err as any;
+      console.error(
+        'Permify lookupSubject error',
+        e?.response?.data ?? e?.message ?? e
+      );
+      return [];
+    }
+  }
+
+  async deleteRelationships({
+    entityType,
+    entityId,
+    relation,
+    subjectType,
+    subjectId,
+  }: {
+    entityType: string;
+    entityId: string;
+    relation: string;
+    subjectType: string;
+    subjectId: string;
+  }) {
+    const url = `${this.base}/tenants/${this.tenantId}/relationships/delete`;
+    try {
+      await axios.post(
+        url,
+        {
+          filter: {
+            entity: { type: entityType, ids: [entityId] },
+            relation,
+            subject: { type: subjectType, ids: [subjectId], relation: '' },
+          },
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      return true;
+    } catch (err) {
+      const e = err as any;
+      console.error(
+        'Permify delete error',
         e?.response?.data ?? e?.message ?? e
       );
       return false;
@@ -84,15 +175,30 @@ export class PermifyClient {
     tuples: Array<{
       entity: { type: string; id: string };
       relation: string;
-      subject: { type: string; id: string };
+      subject: { type: string; id: string; relation?: string };
     }>
   ) {
     const url = `${this.base}/tenants/${this.tenantId}/relationships/write`;
     try {
-      await axios.post(url, { tuples, metadata: {} });
+      await axios.post(
+        url,
+        {
+          metadata: { schema_version: '' },
+          tuples: tuples.map((t) => ({
+            entity: t.entity,
+            relation: t.relation,
+            subject: {
+              type: t.subject.type,
+              id: t.subject.id,
+              relation: t.subject.relation ?? '',
+            },
+          })),
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
       return true;
     } catch (err) {
-      const e: any = err as any;
+      const e = err as any;
       console.error(
         'Permify write error',
         e?.response?.data ?? e?.message ?? e

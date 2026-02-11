@@ -1,5 +1,6 @@
 /// <reference types="next-auth" />
 import NextAuth from 'next-auth';
+import { PermifyClient } from '@/lib/permify';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -62,6 +63,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt(params) {
       const { token, account } = params;
       if (account) {
+        // Auto-join organization on first login
+        const userId = account.providerAccountId;
+        if (userId) {
+          const permify = new PermifyClient();
+          await permify.writeRelationships([
+            {
+              entity: { type: 'organization', id: 'acme' },
+              relation: 'member',
+              subject: { type: 'user', id: userId },
+            },
+          ]);
+        }
         return {
           ...token,
           ...account,

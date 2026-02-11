@@ -71,6 +71,10 @@
               "accessTokenKeyId": "#{asymmetricKeyId}",
               "idTokenKeyId": "#{asymmetricKeyId}"
             },
+            "registrationConfiguration": {
+              "enabled": true,
+              "type": "basic"
+            },
             "roles": [
               {
                 "name": "admin",

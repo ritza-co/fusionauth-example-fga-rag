@@ -14,6 +14,8 @@ const schema = `entity user {}
 entity organization {
     relation admin @user
     relation member @user
+
+    permission edit = admin
 }
 
 entity doc {
@@ -21,7 +23,7 @@ entity doc {
     relation owner @user
     relation viewer @user
 
-    permission view = viewer or owner or org.admin or org.member
+    permission view = viewer or owner or org.admin
 }`;
 
 async function main() {

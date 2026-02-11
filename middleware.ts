@@ -1,11 +1,16 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
+const protectedPaths = ['/chat', '/documents', '/organization'];
+
 export default auth((req) => {
-  if (!req.auth && req.nextUrl.pathname.startsWith('/chat')) {
+  const { pathname } = req.nextUrl;
+  const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
+
+  if (!req.auth && isProtected) {
     return NextResponse.redirect(new URL('/', req.nextUrl.origin));
   }
-  if (req.auth && req.nextUrl.pathname === '/') {
+  if (req.auth && pathname === '/') {
     return NextResponse.redirect(new URL('/chat', req.nextUrl.origin));
   }
   return NextResponse.next();

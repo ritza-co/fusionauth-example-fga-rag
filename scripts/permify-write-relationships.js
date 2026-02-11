@@ -24,7 +24,11 @@ const tuples = [
     relation: "member",
     subject: { type: "user", id: JANE },
   },
-
+  {
+    entity: { type: "organization", id: "acme" },
+    relation: "member",
+    subject: { type: "user", id: JOHN },
+  },
   {
     entity: { type: "doc", id: "doc-1" },
     relation: "org",
