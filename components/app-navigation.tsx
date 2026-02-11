@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, FileText, Users } from 'lucide-react';
+import { MessageSquare, FileText, Users, UsersRound } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/chat', label: 'Chat', icon: MessageSquare },
   { href: '/documents', label: 'Documents', icon: FileText },
+  { href: '/teams', label: 'Teams', icon: UsersRound },
   { href: '/organization', label: 'Organization', icon: Users },
 ];
 

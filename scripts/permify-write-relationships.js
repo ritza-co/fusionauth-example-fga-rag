@@ -66,6 +66,62 @@ const tuples = [
     relation: "viewer",
     subject: { type: "user", id: JOHN },
   },
+
+  // Teams — linked to acme
+  {
+    entity: { type: "team", id: "customer-support" },
+    relation: "org",
+    subject: { type: "organization", id: "acme" },
+  },
+  {
+    entity: { type: "team", id: "fraud-and-security" },
+    relation: "org",
+    subject: { type: "organization", id: "acme" },
+  },
+  {
+    entity: { type: "team", id: "disputes-chargebacks" },
+    relation: "org",
+    subject: { type: "organization", id: "acme" },
+  },
+  {
+    entity: { type: "team", id: "loan-servicing" },
+    relation: "org",
+    subject: { type: "organization", id: "acme" },
+  },
+
+  // Team members & leads
+  {
+    entity: { type: "team", id: "customer-support" },
+    relation: "member",
+    subject: { type: "user", id: JANE },
+  },
+  {
+    entity: { type: "team", id: "customer-support" },
+    relation: "lead",
+    subject: { type: "user", id: JANE },
+  },
+  {
+    entity: { type: "team", id: "fraud-and-security" },
+    relation: "member",
+    subject: { type: "user", id: JOHN },
+  },
+
+  // Link existing docs to customer-support team (Jane's team)
+  {
+    entity: { type: "doc", id: "doc-1" },
+    relation: "team",
+    subject: { type: "team", id: "customer-support" },
+  },
+  {
+    entity: { type: "doc", id: "doc-2" },
+    relation: "team",
+    subject: { type: "team", id: "customer-support" },
+  },
+  {
+    entity: { type: "doc", id: "doc-3" },
+    relation: "team",
+    subject: { type: "team", id: "customer-support" },
+  },
 ];
 
 async function main() {

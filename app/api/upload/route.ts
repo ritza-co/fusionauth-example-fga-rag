@@ -72,5 +72,23 @@ export async function POST(req: NextRequest) {
     },
   ]);
 
+  // Auto-link document to uploader's team
+  const userTeams = await permifyClient.lookupEntity({
+    entityType: 'team',
+    permission: 'member',
+    subjectType: 'user',
+    subjectId: userId,
+  });
+
+  if (userTeams.length > 0) {
+    await permifyClient.writeRelationships([
+      {
+        entity: { type: 'doc', id: documentId },
+        relation: 'team',
+        subject: { type: 'team', id: userTeams[0] },
+      },
+    ]);
+  }
+
   return NextResponse.json({ ok: true, documentId });
 }

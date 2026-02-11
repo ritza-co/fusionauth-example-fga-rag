@@ -1,7 +1,7 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
-const protectedPaths = ['/chat', '/documents', '/organization'];
+const protectedPaths = ['/chat', '/documents', '/teams', '/organization'];
 
 export default auth((req) => {
   const { pathname } = req.nextUrl;

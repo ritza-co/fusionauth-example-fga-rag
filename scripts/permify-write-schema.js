@@ -18,12 +18,19 @@ entity organization {
     permission edit = admin
 }
 
+entity team {
+    relation org @organization
+    relation member @user
+    relation lead @user
+}
+
 entity doc {
     relation org @organization
+    relation team @team
     relation owner @user
     relation viewer @user
 
-    permission view = viewer or owner or org.admin
+    permission view = viewer or owner or org.admin or team.member or team.lead
 }`;
 
 async function main() {
