@@ -16,7 +16,34 @@
       "johnUserId": "00000000-0000-0000-0000-000000000003",
       "strangerEmail": "stranger@example.com",
       "strangerPassword": "password",
-      "strangerUserId": "00000000-0000-0000-0000-000000000004"
+      "strangerUserId": "00000000-0000-0000-0000-000000000004",
+      "sarahEmail": "sarah@example.com",
+      "sarahPassword": "password",
+      "sarahUserId": "00000000-0000-0000-0000-000000000005",
+      "mikeEmail": "mike@example.com",
+      "mikePassword": "password",
+      "mikeUserId": "00000000-0000-0000-0000-000000000006",
+      "emilyEmail": "emily@example.com",
+      "emilyPassword": "password",
+      "emilyUserId": "00000000-0000-0000-0000-000000000007",
+      "carlosEmail": "carlos@example.com",
+      "carlosPassword": "password",
+      "carlosUserId": "00000000-0000-0000-0000-000000000008",
+      "rachelEmail": "rachel@example.com",
+      "rachelPassword": "password",
+      "rachelUserId": "00000000-0000-0000-0000-000000000009",
+      "davidEmail": "david@example.com",
+      "davidPassword": "password",
+      "davidUserId": "00000000-0000-0000-0000-000000000010",
+      "lisaEmail": "lisa@example.com",
+      "lisaPassword": "password",
+      "lisaUserId": "00000000-0000-0000-0000-000000000011",
+      "tomEmail": "tom@example.com",
+      "tomPassword": "password",
+      "tomUserId": "00000000-0000-0000-0000-000000000012",
+      "priyaEmail": "priya@example.com",
+      "priyaPassword": "password",
+      "priyaUserId": "00000000-0000-0000-0000-000000000013"
     },
     "apiKeys": [
       {
@@ -150,6 +177,150 @@
             "firstName": "Stranger",
             "lastName": "Noaccess",
             "password": "#{strangerPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{sarahUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1993-01-20",
+            "email": "#{sarahEmail}",
+            "firstName": "Sarah",
+            "lastName": "Chen",
+            "password": "#{sarahPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{mikeUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1991-05-12",
+            "email": "#{mikeEmail}",
+            "firstName": "Mike",
+            "lastName": "Rivera",
+            "password": "#{mikePassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{emilyUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1994-08-03",
+            "email": "#{emilyEmail}",
+            "firstName": "Emily",
+            "lastName": "Zhang",
+            "password": "#{emilyPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{carlosUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1989-12-28",
+            "email": "#{carlosEmail}",
+            "firstName": "Carlos",
+            "lastName": "Mendez",
+            "password": "#{carlosPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{rachelUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1987-04-17",
+            "email": "#{rachelEmail}",
+            "firstName": "Rachel",
+            "lastName": "Kim",
+            "password": "#{rachelPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{davidUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1990-09-05",
+            "email": "#{davidEmail}",
+            "firstName": "David",
+            "lastName": "Okafor",
+            "password": "#{davidPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{lisaUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1992-02-14",
+            "email": "#{lisaEmail}",
+            "firstName": "Lisa",
+            "lastName": "Patel",
+            "password": "#{lisaPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{tomUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1985-07-30",
+            "email": "#{tomEmail}",
+            "firstName": "Tom",
+            "lastName": "Williams",
+            "password": "#{tomPassword}"
+          },
+          "registration": {
+            "applicationId": "#{applicationId}"
+          }
+        }
+      },
+      {
+        "method": "POST",
+        "url": "/api/user/registration/#{priyaUserId}",
+        "body": {
+          "user": {
+            "birthDate": "1995-10-22",
+            "email": "#{priyaEmail}",
+            "firstName": "Priya",
+            "lastName": "Sharma",
+            "password": "#{priyaPassword}"
           },
           "registration": {
             "applicationId": "#{applicationId}"
