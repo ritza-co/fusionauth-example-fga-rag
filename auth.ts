@@ -3,6 +3,7 @@ import NextAuth from 'next-auth';
 import { PermifyClient } from '@/lib/permify';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   providers: [
     {
       id: 'fusionauth',
