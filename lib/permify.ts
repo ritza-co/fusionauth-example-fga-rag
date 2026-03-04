@@ -3,16 +3,24 @@ import axios from 'axios';
 const PERMIFY_HOST = process.env.PERMIFY_HOST || 'localhost';
 const PERMIFY_HTTP_PORT = process.env.PERMIFY_HTTP_PORT || '3476';
 const TENANT_ID = process.env.PERMIFY_TENANT_ID || 't1';
+const PERMIFY_PRESHARED_KEY = process.env.PERMIFY_PRESHARED_KEY || '';
 
 const BASE = `http://${PERMIFY_HOST}:${PERMIFY_HTTP_PORT}/v1`;
 
 export class PermifyClient {
   base: string;
   tenantId: string;
+  private http: ReturnType<typeof axios.create>;
 
-  constructor({ base = BASE, tenantId = TENANT_ID } = {}) {
+  constructor({ base = BASE, tenantId = TENANT_ID, presharedKey = PERMIFY_PRESHARED_KEY } = {}) {
     this.base = base;
     this.tenantId = tenantId;
+    this.http = axios.create({
+      headers: {
+        'Content-Type': 'application/json',
+        ...(presharedKey ? { Authorization: `Bearer ${presharedKey}` } : {}),
+      },
+    });
   }
 
   async checkPermission({
@@ -33,7 +41,7 @@ export class PermifyClient {
     const url = `${this.base}/tenants/${this.tenantId}/permissions/check`;
 
     try {
-      const resp = await axios.post(
+      const resp = await this.http.post(
         url,
         {
           metadata: {
@@ -51,8 +59,7 @@ export class PermifyClient {
             id: subjectId,
             relation,
           },
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        }
       );
 
       return resp.data?.can === 'CHECK_RESULT_ALLOWED';
@@ -79,15 +86,14 @@ export class PermifyClient {
   }): Promise<string[]> {
     const url = `${this.base}/tenants/${this.tenantId}/permissions/lookup-entity`;
     try {
-      const resp = await axios.post(
+      const resp = await this.http.post(
         url,
         {
           metadata: { snap_token: '', schema_version: '', depth: 20 },
           entity_type: entityType,
           permission,
           subject: { type: subjectType, id: subjectId, relation: '' },
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        }
       );
       return resp.data?.entity_ids ?? [];
     } catch (err) {
@@ -113,15 +119,14 @@ export class PermifyClient {
   }): Promise<string[]> {
     const url = `${this.base}/tenants/${this.tenantId}/permissions/lookup-subject`;
     try {
-      const resp = await axios.post(
+      const resp = await this.http.post(
         url,
         {
           metadata: { snap_token: '', schema_version: '', depth: 20 },
           entity: { type: entityType, id: entityId },
           permission,
           subject_reference: { type: subjectType, relation: '' },
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        }
       );
       return resp.data?.subject_ids ?? [];
     } catch (err) {
@@ -149,7 +154,7 @@ export class PermifyClient {
   }) {
     const url = `${this.base}/tenants/${this.tenantId}/relationships/delete`;
     try {
-      await axios.post(
+      await this.http.post(
         url,
         {
           filter: {
@@ -157,8 +162,7 @@ export class PermifyClient {
             relation,
             subject: { type: subjectType, ids: [subjectId], relation: '' },
           },
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        }
       );
       return true;
     } catch (err) {
@@ -180,7 +184,7 @@ export class PermifyClient {
   ) {
     const url = `${this.base}/tenants/${this.tenantId}/relationships/write`;
     try {
-      await axios.post(
+      await this.http.post(
         url,
         {
           metadata: { schema_version: '' },
@@ -193,8 +197,7 @@ export class PermifyClient {
               relation: t.subject.relation ?? '',
             },
           })),
-        },
-        { headers: { 'Content-Type': 'application/json' } }
+        }
       );
       return true;
     } catch (err) {

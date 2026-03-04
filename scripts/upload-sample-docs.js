@@ -282,8 +282,10 @@ async function uploadDoc(d) {
 }
 
 async function main() {
-  for (const d of docs) {
-    await uploadDoc(d);
+  const CONCURRENCY = 5;
+  for (let i = 0; i < docs.length; i += CONCURRENCY) {
+    const batch = docs.slice(i, i + CONCURRENCY);
+    await Promise.all(batch.map(uploadDoc));
   }
 }
 

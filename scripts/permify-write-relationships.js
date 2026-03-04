@@ -6,8 +6,14 @@ dotenv.config({ quiet: true });
 const PERMIFY_HOST = process.env.PERMIFY_HOST || "localhost";
 const PERMIFY_HTTP_PORT = process.env.PERMIFY_HTTP_PORT || "3476";
 const TENANT_ID = process.env.PERMIFY_TENANT_ID || "t1";
+const PERMIFY_PRESHARED_KEY = process.env.PERMIFY_PRESHARED_KEY || "";
 
 const BASE = `http://${PERMIFY_HOST}:${PERMIFY_HTTP_PORT}/v1`;
+
+const authHeaders = {
+  "Content-Type": "application/json",
+  ...(PERMIFY_PRESHARED_KEY ? { Authorization: `Bearer ${PERMIFY_PRESHARED_KEY}` } : {}),
+};
 
 const ADMIN   = "ec218805-2030-4827-a5d0-734c7703184b";
 const JANE    = "567f1ddc-1c23-4b80-81f8-f32a2d1945c4"; // customer-support lead
@@ -147,7 +153,7 @@ const tuples = [
 async function main() {
   const url = `${BASE}/tenants/${TENANT_ID}/relationships/write`;
   try {
-    const resp = await axios.post(url, { tuples, metadata: {} }, { headers: { "Content-Type": "application/json" } });
+    const resp = await axios.post(url, { tuples, metadata: {} }, { headers: authHeaders });
     console.log("Relationships write response:", resp.data ?? resp.status);
     console.log(`Wrote ${tuples.length} relationship tuples.`);
   } catch (err) {
