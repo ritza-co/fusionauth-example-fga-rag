@@ -39,3 +39,21 @@ variable "user_password" {
   sensitive   = true
   default     = "ChangeMe123!"
 }
+
+variable "authorized_redirect_urls" {
+  description = "List of authorized OAuth redirect URLs for the application (e.g. http://localhost:3000/api/auth/callback/fusionauth)."
+  type        = list(string)
+  default     = ["http://localhost:3000/api/auth/callback/fusionauth"]
+}
+
+variable "logout_url" {
+  description = "URL to redirect to after logout."
+  type        = string
+  default     = "http://localhost:3000"
+}
+
+variable "jwt_key_id" {
+  description = "ID of the FusionAuth asymmetric key used to sign access and ID tokens."
+  type        = string
+  default     = ""
+}

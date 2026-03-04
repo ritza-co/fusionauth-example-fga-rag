@@ -5,3 +5,12 @@ tenant_id        = "replace-with-existing-tenant-id"
 application_name = "kickstart-app"
 user_password    = "ChangeMe123!"
 users_json_file  = "./users.example.json"
+logout_url = "http://localhost:3000"
+authorized_redirect_urls = [
+  "http://localhost:3000/api/auth/callback/fusionauth",
+]
+
+# ID of the FusionAuth asymmetric key used to sign access and ID tokens.
+# Find it in FusionAuth UI under Settings → Key Master or via the API.
+# Leave empty to use FusionAuth's default key.
+jwt_key_id = ""

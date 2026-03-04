@@ -73,6 +73,30 @@ resource "fusionauth_application" "main" {
   name      = var.application_name
   tenant_id = var.tenant_id
 
+  oauth_configuration {
+    authorized_redirect_urls = var.authorized_redirect_urls
+    logout_url               = var.logout_url
+    enabled_grants           = ["authorization_code", "refresh_token"]
+    generate_refresh_tokens  = true
+    require_registration     = true
+    scope_handling_policy    = "Compatibility"
+    unknown_scope_policy     = "Allow"
+  }
+
+  dynamic "jwt_configuration" {
+    for_each = length(trimspace(var.jwt_key_id)) > 0 ? [1] : []
+    content {
+      enabled         = true
+      access_token_id = var.jwt_key_id
+      id_token_key_id = var.jwt_key_id
+    }
+  }
+
+  registration_configuration {
+    enabled = true
+    type    = "basic"
+  }
+
   depends_on = [
     terraform_data.validate_api_key,
     terraform_data.validate_users_file,
