@@ -9,18 +9,18 @@ const TENANT_ID = process.env.PERMIFY_TENANT_ID || "t1";
 
 const BASE = `http://${PERMIFY_HOST}:${PERMIFY_HTTP_PORT}/v1`;
 
-const ADMIN   = "00000000-0000-0000-0000-000000000001";
-const JANE    = "00000000-0000-0000-0000-000000000002"; // customer-support lead
-const JOHN    = "00000000-0000-0000-0000-000000000003"; // fraud-and-security lead
-const SARAH   = "00000000-0000-0000-0000-000000000005"; // customer-support
-const MIKE    = "00000000-0000-0000-0000-000000000006"; // customer-support
-const EMILY   = "00000000-0000-0000-0000-000000000007"; // fraud-and-security
-const CARLOS  = "00000000-0000-0000-0000-000000000008"; // fraud-and-security
-const RACHEL  = "00000000-0000-0000-0000-000000000009"; // disputes-chargebacks lead
-const DAVID   = "00000000-0000-0000-0000-000000000010"; // disputes-chargebacks
-const LISA    = "00000000-0000-0000-0000-000000000011"; // disputes-chargebacks
-const TOM     = "00000000-0000-0000-0000-000000000012"; // loan-servicing lead
-const PRIYA   = "00000000-0000-0000-0000-000000000013"; // loan-servicing
+const ADMIN   = "ec218805-2030-4827-a5d0-734c7703184b";
+const JANE    = "567f1ddc-1c23-4b80-81f8-f32a2d1945c4"; // customer-support lead
+const JOHN    = "d1cfbb04-0ffe-4669-b5a1-67900f33bb16"; // fraud-and-security lead
+const SARAH   = "66376233-9f1a-4f02-8729-f1f18cca972c"; // customer-support
+const MIKE    = "aa7467a7-c4eb-4860-99b6-5236b8dc28d1"; // customer-support
+const EMILY   = "2b38724d-354a-4989-82cd-15c2fb64b8ea"; // fraud-and-security
+const CARLOS  = "3987da40-b458-4f7f-8151-e5224356ac02"; // fraud-and-security
+const RACHEL  = "dbc41a40-5f42-4b4f-b31c-b98f900f1f94"; // disputes-chargebacks lead
+const DAVID   = "7dc8b3e3-6ae5-4248-9175-59f011c8437e"; // disputes-chargebacks
+const LISA    = "f189dcc4-015c-46de-9609-dab7873e42a9"; // disputes-chargebacks
+const TOM     = "59f5561e-dc9f-477f-a82f-70a36922ece5"; // loan-servicing lead
+const PRIYA   = "a04f44a8-aca1-45f6-b3a1-96944608fae4"; // loan-servicing
 
 const orgRel  = (relation, userId) => ({ entity: { type: "organization", id: "acme" }, relation, subject: { type: "user", id: userId } });
 const teamRel = (teamId, relation, userId) => ({ entity: { type: "team", id: teamId }, relation, subject: { type: "user", id: userId } });

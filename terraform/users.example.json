@@ -1,0 +1,110 @@
+[
+  {
+    "id": "ec218805-2030-4827-a5d0-734c7703184b",
+    "email": "admin@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Admin",
+    "last_name": "User",
+    "username": "admin",
+    "skip_verification": true
+  },
+  {
+    "id": "567f1ddc-1c23-4b80-81f8-f32a2d1945c4",
+    "email": "jane.smith@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "username": "jane.smith",
+    "skip_verification": true
+  },
+  {
+    "id": "d1cfbb04-0ffe-4669-b5a1-67900f33bb16",
+    "email": "john.davis@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "John",
+    "last_name": "Davis",
+    "username": "john.davis",
+    "skip_verification": true
+  },
+  {
+    "id": "66376233-9f1a-4f02-8729-f1f18cca972c",
+    "email": "sarah.johnson@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Sarah",
+    "last_name": "Johnson",
+    "username": "sarah.johnson",
+    "skip_verification": true
+  },
+  {
+    "id": "aa7467a7-c4eb-4860-99b6-5236b8dc28d1",
+    "email": "mike.chen@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Mike",
+    "last_name": "Chen",
+    "username": "mike.chen",
+    "skip_verification": true
+  },
+  {
+    "id": "2b38724d-354a-4989-82cd-15c2fb64b8ea",
+    "email": "emily.brown@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Emily",
+    "last_name": "Brown",
+    "username": "emily.brown",
+    "skip_verification": true
+  },
+  {
+    "id": "3987da40-b458-4f7f-8151-e5224356ac02",
+    "email": "carlos.garcia@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Carlos",
+    "last_name": "Garcia",
+    "username": "carlos.garcia",
+    "skip_verification": true
+  },
+  {
+    "id": "dbc41a40-5f42-4b4f-b31c-b98f900f1f94",
+    "email": "rachel.kim@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Rachel",
+    "last_name": "Kim",
+    "username": "rachel.kim",
+    "skip_verification": true
+  },
+  {
+    "id": "7dc8b3e3-6ae5-4248-9175-59f011c8437e",
+    "email": "david.martinez@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "David",
+    "last_name": "Martinez",
+    "username": "david.martinez",
+    "skip_verification": true
+  },
+  {
+    "id": "f189dcc4-015c-46de-9609-dab7873e42a9",
+    "email": "lisa.thompson@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Lisa",
+    "last_name": "Thompson",
+    "username": "lisa.thompson",
+    "skip_verification": true
+  },
+  {
+    "id": "59f5561e-dc9f-477f-a82f-70a36922ece5",
+    "email": "tom.wilson@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Tom",
+    "last_name": "Wilson",
+    "username": "tom.wilson",
+    "skip_verification": true
+  },
+  {
+    "id": "a04f44a8-aca1-45f6-b3a1-96944608fae4",
+    "email": "priya.patel@example.com",
+    "password": "ChangeMe123!",
+    "first_name": "Priya",
+    "last_name": "Patel",
+    "username": "priya.patel",
+    "skip_verification": true
+  }
+]

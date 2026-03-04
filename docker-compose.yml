@@ -24,11 +24,8 @@ services:
       FUSIONAUTH_APP_RUNTIME_MODE: ${FUSIONAUTH_APP_RUNTIME_MODE}
       FUSIONAUTH_APP_URL: http://fusionauth:9011
       SEARCH_TYPE: database
-      FUSIONAUTH_APP_KICKSTART_FILE: ${FUSIONAUTH_APP_KICKSTART_FILE}
     ports:
       - "9011:9011"
-    volumes:
-      - ./kickstart:/usr/local/fusionauth/kickstart
     restart: unless-stopped
 
   fusionauth-db:

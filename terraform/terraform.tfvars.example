@@ -1,0 +1,7 @@
+fusionauth_host    = "http://localhost:9011"
+fusionauth_api_key = ""
+
+tenant_id        = "replace-with-existing-tenant-id"
+application_name = "kickstart-app"
+user_password    = "ChangeMe123!"
+users_json_file  = "./users.example.json"
