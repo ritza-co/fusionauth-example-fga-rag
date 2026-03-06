@@ -1,5 +1,11 @@
 import { permifyClient } from '@/lib/permify';
 import { ollamaClient } from '@/lib/ollama';
+import {
+  getDocumentFromStore,
+  isDocumentPersistenceEnabled,
+  listDocumentsFromStore,
+  upsertDocument,
+} from '@/lib/rag/document-store';
 
 type StoredDoc = {
   documentId: string;
@@ -32,12 +38,28 @@ export async function addDocument(
 ) {
   const embedding = await ollamaClient.embed(content);
 
-  memoryStore.push({
+  const stored: StoredDoc = {
     documentId,
     content,
     metadata: { owner: ownerId },
     embedding,
-  });
+  };
+
+  if (isDocumentPersistenceEnabled()) {
+    await upsertDocument({
+      documentId: stored.documentId,
+      content: stored.content,
+      ownerId,
+      embedding: stored.embedding,
+    });
+  } else {
+    const existingIndex = memoryStore.findIndex((d) => d.documentId === documentId);
+    if (existingIndex >= 0) {
+      memoryStore[existingIndex] = stored;
+    } else {
+      memoryStore.push(stored);
+    }
+  }
 
   await permifyClient.writeRelationships([
     {
@@ -58,7 +80,16 @@ export async function addDocument(
   }
 }
 
-export function listAllDocuments() {
+export async function listAllDocuments() {
+  if (isDocumentPersistenceEnabled()) {
+    const docs = await listDocumentsFromStore();
+    return (docs ?? []).map((d) => ({
+      documentId: d.documentId,
+      content: d.content.slice(0, 200),
+      metadata: { owner: d.ownerId },
+    }));
+  }
+
   return memoryStore.map((d) => ({
     documentId: d.documentId,
     content: d.content.slice(0, 200),
@@ -66,13 +97,23 @@ export function listAllDocuments() {
   }));
 }
 
-export function getDocumentById(documentId: string) {
-  const doc = memoryStore.find((d) => d.documentId === documentId);
-  if (!doc) return null;
+export async function getDocumentById(documentId: string) {
+  if (isDocumentPersistenceEnabled()) {
+    const doc = await getDocumentFromStore(documentId);
+    if (!doc) return null;
+    return {
+      documentId: doc.documentId,
+      content: doc.content,
+      metadata: { owner: doc.ownerId },
+    };
+  }
+
+  const inMemoryDoc = memoryStore.find((d) => d.documentId === documentId);
+  if (!inMemoryDoc) return null;
   return {
-    documentId: doc.documentId,
-    content: doc.content,
-    metadata: doc.metadata,
+    documentId: inMemoryDoc.documentId,
+    content: inMemoryDoc.content,
+    metadata: inMemoryDoc.metadata,
   };
 }
 
@@ -83,7 +124,16 @@ export async function retrieveWithPermify(
 ) {
   const queryEmbedding = await ollamaClient.embed(query);
 
-  const candidates = memoryStore
+  const sourceDocs: StoredDoc[] = isDocumentPersistenceEnabled()
+    ? ((await listDocumentsFromStore()) ?? []).map((d) => ({
+        documentId: d.documentId,
+        content: d.content,
+        metadata: { owner: d.ownerId },
+        embedding: d.embedding,
+      }))
+    : memoryStore;
+
+  const candidates = sourceDocs
     .map((d) => ({
       doc: d,
       score: cosineSimilarity(queryEmbedding, d.embedding),

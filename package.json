@@ -26,6 +26,7 @@
     "lucide-react": "^0.474.0",
     "next": "^15.5.12",
     "next-auth": "^5.0.0-beta.30",
+    "pg": "^8.16.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.0.1",
@@ -33,6 +34,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@types/pg": "^8.15.5",
     "@types/node": "^20.2.5",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

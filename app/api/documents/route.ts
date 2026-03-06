@@ -21,7 +21,7 @@ export async function GET() {
     subjectId: userId,
   });
 
-  const allDocs = listAllDocuments();
+  const allDocs = await listAllDocuments();
   const permitted = allDocs.filter((d) =>
     permittedDocIds.includes(d.documentId)
   );

@@ -71,6 +71,16 @@ New users who register through FusionAuth are automatically added as members of 
 | `*` | `/api/auth/[...nextauth]` | NextAuth OAuth callbacks (FusionAuth provider) |
 | `GET` | `/api/logout` | Redirect to FusionAuth logout |
 
+## Document Persistence
+
+By default, uploaded documents are stored in memory only. For durable storage (required in Railway or any multi-instance deployment), set:
+
+```bash
+DOCUMENTS_DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
+```
+
+When `DOCUMENTS_DATABASE_URL` is set, documents and embeddings are stored in PostgreSQL and survive restarts/redeploys.
+
 ## Contributors
 
 - [FusionAuth](https://fusionauth.io) -- Authentication and user management
