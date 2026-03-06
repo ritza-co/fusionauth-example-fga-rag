@@ -3,12 +3,9 @@ import dotenv from "dotenv";
 
 dotenv.config({ quiet: true });
 
-const PERMIFY_HOST = process.env.PERMIFY_HOST || "localhost";
-const PERMIFY_HTTP_PORT = process.env.PERMIFY_HTTP_PORT || "3476";
+const PERMIFY_BASE_URL = process.env.PERMIFY_BASE_URL || "http://localhost:3476/v1";
 const TENANT_ID = process.env.PERMIFY_TENANT_ID || "t1";
 const PERMIFY_PRESHARED_KEY = process.env.PERMIFY_PRESHARED_KEY || "";
-
-const BASE = `http://${PERMIFY_HOST}:${PERMIFY_HTTP_PORT}/v1`;
 
 const authHeaders = {
   "Content-Type": "application/json",
@@ -151,7 +148,7 @@ const tuples = [
 ];
 
 async function main() {
-  const url = `${BASE}/tenants/${TENANT_ID}/relationships/write`;
+  const url = `${PERMIFY_BASE_URL}/tenants/${TENANT_ID}/relationships/write`;
   try {
     const resp = await axios.post(url, { tuples, metadata: {} }, { headers: authHeaders });
     console.log("Relationships write response:", resp.data ?? resp.status);

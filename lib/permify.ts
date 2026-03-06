@@ -1,18 +1,15 @@
 import axios from 'axios';
 
-const PERMIFY_HOST = process.env.PERMIFY_HOST || 'localhost';
-const PERMIFY_HTTP_PORT = process.env.PERMIFY_HTTP_PORT || '3476';
+const PERMIFY_BASE_URL = process.env.PERMIFY_BASE_URL || `http://localhost:3476/v1`;
 const TENANT_ID = process.env.PERMIFY_TENANT_ID || 't1';
 const PERMIFY_PRESHARED_KEY = process.env.PERMIFY_PRESHARED_KEY || '';
-
-const BASE = `http://${PERMIFY_HOST}:${PERMIFY_HTTP_PORT}/v1`;
 
 export class PermifyClient {
   base: string;
   tenantId: string;
   private http: ReturnType<typeof axios.create>;
 
-  constructor({ base = BASE, tenantId = TENANT_ID, presharedKey = PERMIFY_PRESHARED_KEY } = {}) {
+  constructor({ base = PERMIFY_BASE_URL, tenantId = TENANT_ID, presharedKey = PERMIFY_PRESHARED_KEY } = {}) {
     this.base = base;
     this.tenantId = tenantId;
     this.http = axios.create({
