@@ -2,36 +2,33 @@ import axios from 'axios';
 
 const OLLAMA_HOST = process.env.OLLAMA_HOST || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2';
-const OLLAMA_EMBED_MODEL =
-  process.env.OLLAMA_EMBED_MODEL || 'nomic-embed-text';
+const VOYAGE_API_KEY = process.env.VOYAGE_API_KEY;
+const VOYAGE_MODEL = process.env.VOYAGE_MODEL || 'voyage-3-lite';
 
-export class OllamaClient {
-  host: string;
-  model: string;
-  embedModel: string;
+export class AIClient {
+  ollamaHost: string;
+  ollamaModel: string;
 
   constructor({
     host = OLLAMA_HOST,
     model = OLLAMA_MODEL,
-    embedModel = OLLAMA_EMBED_MODEL,
   } = {}) {
-    this.host = host;
-    this.model = model;
-    this.embedModel = embedModel;
+    this.ollamaHost = host;
+    this.ollamaModel = model;
   }
 
   async embed(text: string): Promise<number[]> {
-    const url = `${this.host}/api/embed`;
     try {
-      const resp = await axios.post(url, {
-        model: this.embedModel,
-        input: text,
-      });
-      return resp.data?.embeddings?.[0] ?? [];
+      const resp = await axios.post(
+        'https://api.voyageai.com/v1/embeddings',
+        { model: VOYAGE_MODEL, input: text },
+        { headers: { Authorization: `Bearer ${VOYAGE_API_KEY}` } }
+      );
+      return resp.data?.data?.[0]?.embedding ?? [];
     } catch (err) {
       const e = err as any;
       console.error(
-        'Ollama embed error',
+        'Voyage embed error',
         e?.response?.data ?? e?.message ?? e
       );
       return [];
@@ -39,10 +36,10 @@ export class OllamaClient {
   }
 
   async chat(prompt: string): Promise<string> {
-    const url = `${this.host}/api/chat`;
+    const url = `${this.ollamaHost}/api/chat`;
     try {
       const resp = await axios.post(url, {
-        model: this.model,
+        model: this.ollamaModel,
         messages: [{ role: 'user', content: prompt }],
         stream: false,
       });
@@ -58,4 +55,4 @@ export class OllamaClient {
   }
 }
 
-export const ollamaClient = new OllamaClient();
+export const aiClient = new AIClient();
