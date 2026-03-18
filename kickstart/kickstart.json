@@ -1,0 +1,295 @@
+{
+  "variables": {
+    "apiKey": "bf69486b-4733-4470-a592-f1bc7a64f314",
+    "applicationId": "e9fdb985-9173-4e01-9d73-ac2d60d1dc8e",
+    "clientSecret": "super-secret-client-secret",
+    "rsaKeyId": "c67f945a-b082-40f5-ae7d-0f6b90b4d720"
+  },
+  "apiKeys": [
+    {
+      "key": "#{apiKey}",
+      "description": "Dev API key"
+    }
+  ],
+  "requests": [
+    {
+      "method": "PATCH",
+      "url": "/api/tenant/#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "tenant": {
+          "issuer": "http://localhost:9011"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/key/generate/#{rsaKeyId}",
+      "body": {
+        "key": {
+          "algorithm": "RS256",
+          "name": "App RS256 signing key",
+          "length": 2048
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/application/#{applicationId}",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "application": {
+          "name": "kickstart-app",
+          "jwtConfiguration": {
+            "enabled": true,
+            "accessTokenKeyId": "#{rsaKeyId}",
+            "idTokenKeyId": "#{rsaKeyId}"
+          },
+          "oauthConfiguration": {
+            "authorizedRedirectURLs": [
+              "http://localhost:3000/api/auth/callback/fusionauth"
+            ],
+            "logoutURL": "http://localhost:3000",
+            "clientSecret": "#{clientSecret}",
+            "enabledGrants": ["authorization_code", "refresh_token"],
+            "generateRefreshTokens": true,
+            "requireRegistration": false
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/ec218805-2030-4827-a5d0-734c7703184b",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "admin@example.com",
+          "password": "password",
+          "firstName": "Admin",
+          "lastName": "User",
+          "username": "admin"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/567f1ddc-1c23-4b80-81f8-f32a2d1945c4",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "jane@example.com",
+          "password": "password",
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "username": "jane"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/d1cfbb04-0ffe-4669-b5a1-67900f33bb16",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "john@example.com",
+          "password": "password",
+          "firstName": "John",
+          "lastName": "Davis",
+          "username": "john"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/66376233-9f1a-4f02-8729-f1f18cca972c",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "sarah@example.com",
+          "password": "password",
+          "firstName": "Sarah",
+          "lastName": "Johnson",
+          "username": "sarah"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/aa7467a7-c4eb-4860-99b6-5236b8dc28d1",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "mike@example.com",
+          "password": "password",
+          "firstName": "Mike",
+          "lastName": "Chen",
+          "username": "mike"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/2b38724d-354a-4989-82cd-15c2fb64b8ea",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "emily@example.com",
+          "password": "password",
+          "firstName": "Emily",
+          "lastName": "Brown",
+          "username": "emily"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/3987da40-b458-4f7f-8151-e5224356ac02",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "carlos@example.com",
+          "password": "password",
+          "firstName": "Carlos",
+          "lastName": "Garcia",
+          "username": "carlos"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/dbc41a40-5f42-4b4f-b31c-b98f900f1f94",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "rachel@example.com",
+          "password": "password",
+          "firstName": "Rachel",
+          "lastName": "Kim",
+          "username": "rachel"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/7dc8b3e3-6ae5-4248-9175-59f011c8437e",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "david@example.com",
+          "password": "password",
+          "firstName": "David",
+          "lastName": "Martinez",
+          "username": "david"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/f189dcc4-015c-46de-9609-dab7873e42a9",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "lisa@example.com",
+          "password": "password",
+          "firstName": "Lisa",
+          "lastName": "Thompson",
+          "username": "lisa"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/59f5561e-dc9f-477f-a82f-70a36922ece5",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "tom@example.com",
+          "password": "password",
+          "firstName": "Tom",
+          "lastName": "Wilson",
+          "username": "tom"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/a04f44a8-aca1-45f6-b3a1-96944608fae4",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "priya@example.com",
+          "password": "password",
+          "firstName": "Priya",
+          "lastName": "Patel",
+          "username": "priya"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/user/registration/66376233-0000-0000-0000-000000000001",
+      "tenantId": "#{FUSIONAUTH_TENANT_ID}",
+      "body": {
+        "user": {
+          "email": "stranger@example.com",
+          "password": "password",
+          "firstName": "Stranger",
+          "lastName": "User",
+          "username": "stranger"
+        },
+        "registration": {
+          "applicationId": "#{applicationId}"
+        },
+        "skipVerification": true
+      }
+    }
+  ]
+}

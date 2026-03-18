@@ -2,7 +2,7 @@ import { auth } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { decodeJwt } from 'jose';
 import { retrieveWithPermify } from '@/lib/rag/retriever';
-import { ollamaClient } from '@/lib/ollama';
+import { openaiClient } from '@/lib/openai';
 import { getOrCreateConversation } from '@/lib/conversations';
 
 export async function POST(req: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       .map((d) => `[${d.documentId}]: ${d.content}`)
       .join('\n\n');
     const prompt = `Use the following documents to answer the question. If the documents don't contain the answer, say so.\n\nDocuments:\n${context}\n\nQuestion: ${query}\n\nAnswer:`;
-    answer = await ollamaClient.chat(prompt);
+    answer = await openaiClient.chat(prompt);
   }
 
   conv.messages.push({
