@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   permify:
     image: ghcr.io/permify/permify:latest
@@ -10,7 +8,7 @@ services:
     restart: unless-stopped
 
   fusionauth:
-    image: fusionauth/fusionauth-app:latest
+    image: fusionauth/fusionauth-app:1.48.3
     depends_on:
       fusionauth-db:
         condition: service_healthy
@@ -23,9 +21,12 @@ services:
       FUSIONAUTH_APP_MEMORY: ${FUSIONAUTH_APP_MEMORY}
       FUSIONAUTH_APP_RUNTIME_MODE: ${FUSIONAUTH_APP_RUNTIME_MODE}
       FUSIONAUTH_APP_URL: http://fusionauth:9011
+      FUSIONAUTH_APP_KICKSTART_FILE: /usr/local/fusionauth/kickstart/kickstart.json
       SEARCH_TYPE: database
     ports:
       - "9011:9011"
+    volumes:
+      - ./kickstart:/usr/local/fusionauth/kickstart
     restart: unless-stopped
 
   fusionauth-db:
@@ -45,23 +46,5 @@ services:
       - fusionauth-db-data:/var/lib/postgresql/data
     restart: unless-stopped
 
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama-data:/root/.ollama
-    restart: unless-stopped
-
-  ollama-init:
-    image: ollama/ollama:latest
-    depends_on:
-      - ollama
-    environment:
-      OLLAMA_HOST: ollama:11434
-    entrypoint: ["sh", "-c", "sleep 5 && ollama pull nomic-embed-text && ollama pull llama3.2"]
-    restart: "no"
-
 volumes:
   fusionauth-db-data:
-  ollama-data:

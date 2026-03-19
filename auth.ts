@@ -14,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorization: {
         url: `${process.env.AUTH_FUSIONAUTH_ISSUER}/oauth2/authorize`,
         params: {
-          scope: 'offline_access email openid profile',
+          scope: 'email openid profile',
           tenantId: process.env.AUTH_FUSIONAUTH_TENANT_ID!,
         },
       },
