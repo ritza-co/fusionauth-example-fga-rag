@@ -1,16 +1,17 @@
 # FusionAuth FGA + RAG Example
 
-A Next.js chat application that combines **FusionAuth** for authentication, **Permify** for fine-grained authorization (FGA), and a RAG pipeline powered by **Voyage AI** (embeddings) and **Anthropic Claude** (generation). Users can only query documents they have permission to access -- permissions are enforced _before_ documents reach the LLM, so unauthorized content is never exposed.
+A Next.js chat application that combines **FusionAuth** for authentication, **Permify** for fine-grained authorization (FGA), and a RAG pipeline for retrieval-augmented generation. Users can only query documents they have permission to access -- permissions are enforced _before_ documents reach the LLM, so unauthorized content is never exposed.
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and Docker Compose
 - [Node.js](https://nodejs.org/) 18+
+- An API key for at least one AI provider (see [LLM/Embedding Providers](#llmembedding-providers))
 
 ## Quick Setup
 
 ```bash
-# Start infrastructure (FusionAuth, Permify, Ollama, PostgreSQL)
+# Start infrastructure (FusionAuth, Permify, PostgreSQL)
 docker compose up -d
 
 # Install dependencies
@@ -26,14 +27,27 @@ npm run dev
 npm run seed:all
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Sign in with one of the seed users or create a new account:
+Open [http://localhost:3000](http://localhost:3000). Sign in with one of the seed users or create a new account.
 
-| User | Email | Password | Org Role |
-|------|-------|----------|----------|
-| Admin | `admin@example.com` | `password` | admin |
-| Jane | `jane@example.com` | `password` | member |
-| John | `john@example.com` | `password` | -- |
-| Stranger | `stranger@example.com` | `password` | -- |
+### Seed Users
+
+All seed users share the password `password`.
+
+| User | Email | Org Role | Team |
+|------|-------|----------|------|
+| Admin | `admin@example.com` | admin | -- |
+| Jane | `jane@example.com` | member | Customer Support (lead) |
+| John | `john@example.com` | member | Fraud and Security (lead) |
+| Sarah | `sarah@example.com` | member | Customer Support |
+| Mike | `mike@example.com` | member | Customer Support |
+| Emily | `emily@example.com` | member | Fraud and Security |
+| Carlos | `carlos@example.com` | member | Fraud and Security |
+| Rachel | `rachel@example.com` | member | Disputes/Chargebacks (lead) |
+| David | `david@example.com` | member | Disputes/Chargebacks |
+| Lisa | `lisa@example.com` | member | Disputes/Chargebacks |
+| Tom | `tom@example.com` | member | Loan Servicing (lead) |
+| Priya | `priya@example.com` | member | Loan Servicing |
+| Stranger | `stranger@example.com` | -- | -- |
 
 New users who register through FusionAuth are automatically added as members of the organization.
 
@@ -45,14 +59,14 @@ This project is a Next.js application that enforces authorization before RAG con
 
 - **Web app (Next.js App Router)**: UI pages and API routes (`/api/chat`, `/api/documents`, `/api/upload`, org/team management).
 - **Authentication (FusionAuth + NextAuth)**: OAuth login, token/session handling, and first-login organization membership bootstrap.
-- **Authorization (Permify)**: Relationship-based access checks (`view`, `member`, `admin`, team/document relationships).
+- **Authorization (Permify)**: Relationship-based access checks (`view`, `edit`, `admin`, `member`, `lead`, `owner`, `viewer`, team/document relationships).
 - **RAG Pipeline (Retriever + AI Client)**: Embedding generation, similarity search, permission filtering, and answer generation.
 - **Document Store**:
 	- In-memory (default, non-durable)
 	- PostgreSQL via `DOCUMENTS_DATABASE_URL` (durable)
 - **LLM/Embedding Providers**:
-	- Voyage AI for embeddings
-	- Anthropic Claude for final answer generation
+	- OpenAI for chat and embeddings (default, set `AI_PROVIDER=openai`)
+	- Anthropic Claude for chat + Voyage AI for embeddings (set `AI_PROVIDER=anthropic`)
 
 ### System Architecture
 
@@ -63,7 +77,7 @@ This project is a Next.js application that enforces authorization before RAG con
 1. User authenticates through FusionAuth (via NextAuth provider).
 2. User sends a chat query to `/api/chat`.
 3. Retriever embeds the query, ranks candidate documents by similarity, then asks Permify which documents the user can `view`.
-4. Only permitted documents are passed as context to Claude.
+4. Only permitted documents are passed as context to the LLM.
 5. API returns answer and source document IDs.
 
 This "authorize before generate" model is the key security property of the system.
@@ -94,6 +108,16 @@ This "authorize before generate" model is the key security property of the syste
 | `DELETE` | `/api/organization/members` | Remove a member _(admin only)_ |
 | `POST` | `/api/organization/admins` | Promote a member to admin _(admin only)_ |
 | `DELETE` | `/api/organization/admins` | Demote an admin _(admin only)_ |
+
+### Teams
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/teams` | List all teams with members |
+| `POST` | `/api/teams/members` | Add a member to a team by email _(admin only)_ |
+| `DELETE` | `/api/teams/members` | Remove a member from a team _(admin only)_ |
+| `POST` | `/api/teams/lead` | Promote a team member to lead _(admin only)_ |
+| `DELETE` | `/api/teams/lead` | Demote a team lead _(admin only)_ |
 
 ### Auth
 
