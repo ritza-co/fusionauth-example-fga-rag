@@ -1,5 +1,5 @@
 import { permifyClient } from '@/lib/permify';
-import { openaiClient } from '@/lib/openai';
+import { aiClient } from '@/lib/ai-client';
 import {
   getDocumentFromStore,
   isDocumentPersistenceEnabled,
@@ -36,7 +36,7 @@ export async function addDocument(
   ownerId: string,
   makePublic = false
 ) {
-  const embedding = await openaiClient.embed(content);
+  const embedding = await aiClient.embed(content);
 
   const stored: StoredDoc = {
     documentId,
@@ -122,7 +122,7 @@ export async function retrieveWithPermify(
   userId: string,
   topK = 5
 ) {
-  const queryEmbedding = await openaiClient.embed(query);
+  const queryEmbedding = await aiClient.embed(query);
 
   const sourceDocs: StoredDoc[] = isDocumentPersistenceEnabled()
     ? ((await listDocumentsFromStore()) ?? []).map((d) => ({

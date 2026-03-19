@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2026-03-17T00:00:00.000Z" agent="Mozilla/5.0" version="24.7.17" editor="draw.io">
+  <diagram id="fusionauth-fga-rag" name="System Architecture">
+    <mxGraphModel dx="1600" dy="960" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="user" value="User Browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="260" width="170" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="next" value="Next.js App and API Routes&#xa;(chat, upload, documents, org, teams)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="280" y="230" width="290" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="fusionauth" value="FusionAuth&#xa;(OAuth Provider)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="640" y="60" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="permify" value="Permify&#xa;(FGA Authorization)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="190" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="retriever" value="Retriever Service&#xa;lib/rag/retriever.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="640" y="320" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="docstore" value="Document Store&#xa;Memory or PostgreSQL" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="940" y="320" width="230" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="voyage" value="Voyage AI&#xa;(Embeddings)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="940" y="170" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="claude" value="Anthropic Claude&#xa;(Answer Generation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="940" y="470" width="230" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="Login + app requests" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="user" target="next">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="OAuth / token exchange" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="next" target="fusionauth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="POST /api/chat" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="next" target="retriever">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="Embed query" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="retriever" target="voyage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="Load docs + embeddings" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="retriever" target="docstore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="Check view permission" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="retriever" target="permify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" value="Permitted context" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="retriever" target="next">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="380" />
+              <mxPoint x="590" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" value="Generate answer" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="next" target="claude">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="Answer + sources" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="next" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="220" />
+              <mxPoint x="240" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="POST /api/upload" style="endArrow=block;html=1;rounded=0;dashed=1;" edge="1" parent="1" source="user" target="next">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="420" />
+              <mxPoint x="300" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" value="Embed document" style="endArrow=block;html=1;rounded=0;dashed=1;" edge="1" parent="1" source="next" target="voyage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="Upsert document" style="endArrow=block;html=1;rounded=0;dashed=1;" edge="1" parent="1" source="next" target="docstore">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="Write owner/org/team relationships" style="endArrow=block;html=1;rounded=0;dashed=1;" edge="1" parent="1" source="next" target="permify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

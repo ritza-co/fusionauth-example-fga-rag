@@ -1,6 +1,6 @@
 # FusionAuth FGA + RAG Example
 
-A Next.js chat application that combines **FusionAuth** for authentication, **Permify** for fine-grained authorization (FGA), and **Ollama** for local RAG (Retrieval-Augmented Generation). Users can only query documents they have permission to access — permissions are enforced _before_ documents reach the LLM, so unauthorized content is never exposed.
+A Next.js chat application that combines **FusionAuth** for authentication, **Permify** for fine-grained authorization (FGA), and a RAG pipeline powered by **Voyage AI** (embeddings) and **Anthropic Claude** (generation). Users can only query documents they have permission to access -- permissions are enforced _before_ documents reach the LLM, so unauthorized content is never exposed.
 
 ## Prerequisites
 
@@ -36,6 +36,37 @@ Open [http://localhost:3000](http://localhost:3000). Sign in with one of the see
 | Stranger | `stranger@example.com` | `password` | -- |
 
 New users who register through FusionAuth are automatically added as members of the organization.
+
+## High-Level Architecture
+
+This project is a Next.js application that enforces authorization before RAG context reaches the LLM.
+
+### Core Components
+
+- **Web app (Next.js App Router)**: UI pages and API routes (`/api/chat`, `/api/documents`, `/api/upload`, org/team management).
+- **Authentication (FusionAuth + NextAuth)**: OAuth login, token/session handling, and first-login organization membership bootstrap.
+- **Authorization (Permify)**: Relationship-based access checks (`view`, `member`, `admin`, team/document relationships).
+- **RAG Pipeline (Retriever + AI Client)**: Embedding generation, similarity search, permission filtering, and answer generation.
+- **Document Store**:
+	- In-memory (default, non-durable)
+	- PostgreSQL via `DOCUMENTS_DATABASE_URL` (durable)
+- **LLM/Embedding Providers**:
+	- Voyage AI for embeddings
+	- Anthropic Claude for final answer generation
+
+### System Architecture
+
+![System Architecture](docs/system-architecture.png)
+
+### Request Flow Summary
+
+1. User authenticates through FusionAuth (via NextAuth provider).
+2. User sends a chat query to `/api/chat`.
+3. Retriever embeds the query, ranks candidate documents by similarity, then asks Permify which documents the user can `view`.
+4. Only permitted documents are passed as context to Claude.
+5. API returns answer and source document IDs.
+
+This "authorize before generate" model is the key security property of the system.
 
 ## APIs
 
